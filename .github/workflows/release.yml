@@ -49,7 +49,7 @@ jobs:
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           COMMIT=${{ github.sha }}
-          BUILD_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          BUILD_TIME=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
           BINARY_NAME=ldcli-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.suffix }}
           LDFLAGS="-X github.com/mail/go-ldparser/cmd/ldcli.Version=${VERSION} -X github.com/mail/go-ldparser/cmd/ldcli.Commit=${COMMIT} -X github.com/mail/go-ldparser/cmd/ldcli.BuildTime=${BUILD_TIME}"
           go build -ldflags "$LDFLAGS" -o "$BINARY_NAME" ./cmd/ldcli
