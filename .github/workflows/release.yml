@@ -9,7 +9,17 @@ permissions:
   contents: write
 
 jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          prerelease: false
+
   build:
+    needs: create-release
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -57,6 +67,4 @@ jobs:
       - name: Upload release artifacts
         uses: softprops/action-gh-release@v1
         with:
-          files: ldcli-*
-          draft: false
-          prerelease: false
+          files: ldcli-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.suffix }}
