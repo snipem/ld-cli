@@ -51,9 +51,8 @@ jobs:
           COMMIT=${{ github.sha }}
           BUILD_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
           BINARY_NAME=ldcli-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.suffix }}
-          go build \
-            -ldflags "-X github.com/mail/go-ldparser/cmd/ldcli.Version=$VERSION -X github.com/mail/go-ldparser/cmd/ldcli.Commit=$COMMIT -X github.com/mail/go-ldparser/cmd/ldcli.BuildTime=$BUILD_TIME" \
-            -o "$BINARY_NAME" ./cmd/ldcli
+          LDFLAGS="-X github.com/mail/go-ldparser/cmd/ldcli.Version=${VERSION} -X github.com/mail/go-ldparser/cmd/ldcli.Commit=${COMMIT} -X github.com/mail/go-ldparser/cmd/ldcli.BuildTime=${BUILD_TIME}"
+          go build -ldflags "$LDFLAGS" -o "$BINARY_NAME" ./cmd/ldcli
 
       - name: Upload release artifacts
         uses: softprops/action-gh-release@v1
