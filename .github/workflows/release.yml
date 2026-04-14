@@ -52,7 +52,7 @@ jobs:
           BUILD_TIME=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
           BINARY_NAME=ldcli-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.suffix }}
           go build \
-            -ldflags "-X main.Version=$VERSION -X main.Commit=$COMMIT -X main.BuildTime=$BUILD_TIME" \
+            -ldflags "-X github.com/mail/go-ldparser/cmd/ldcli.Version=$VERSION -X github.com/mail/go-ldparser/cmd/ldcli.Commit=$COMMIT -X github.com/mail/go-ldparser/cmd/ldcli.BuildTime=$BUILD_TIME" \
             -o "$BINARY_NAME" ./cmd/ldcli
 
       - name: Upload release artifacts
