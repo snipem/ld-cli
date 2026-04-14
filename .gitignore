@@ -1,0 +1,12 @@
+cmd/debug
+cmd/ldcli/ldcli.exe
+example/example.exe
+example/ldviewer.exe
+report.html
+ldparser
+testdata/ac-tatuusfa1-spa.ldx
+testdata/lmu-bmwgt3-spa-q1.ldx
+coverage.html
+coverage.out
+bin
+.claude
