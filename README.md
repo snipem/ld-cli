@@ -16,23 +16,82 @@ The binary format was documented by the community. This Go port is based on the 
 - **Lap boundaries**: automatic detection via lap number or distance resets
 - **Sample rates**: 10–20 Hz per channel, some channels at 1–2 Hz for aggregates
 
+## Example AI Agent Usage
+
+```
+❯ use ldcli tool to analyze why do my rears lock up with the latest P1 session ld file   
+
+● Bash(ldcli --help 2>&1 | head -60)
+  ⎿  ldcli — race telemetry CLI for .ld files
+
+     Start here:
+     … +20 lines (ctrl+o to expand)
+
+● Bash(ldcli events
+      "LMP2_ELMS/Autodromo
+      Nazionale Monza/2026-04-13 - 21-32-22 - Autodromo Nazionale Monza - AF
+      Corse #…)
+  ⎿  {
+       "files": [
+         {
+     … +426 lines (ctrl+o to expand)
+
+● Bash(ldcli analyze braking
+      "LMP2_ELMS/Autodromo
+      Nazionale Monza/2026-04-13 - 21-32-22 - Autodromo Nazionale Monza - A…)
+  ⎿  {
+       "files": [
+         {
+     … +426 lines (ctrl+o to expand)
+
+...
+
+● Now I have everything I need. Here's the analysis:
+
+  ---
+  Rear Lockup Analysis — P1 Session, Monza
+
+  Root Cause: Rear Brake Bias Too High
+
+  Brake Bias Rear = 47.6% is fixed/constant all session (never adjusted). This
+  means the rears are receiving 47.6% of total braking force while the fronts
+  only get 52.4%. Under heavy braking from Monza's high speeds (230–280 km/h),
+  longitudinal weight transfer dumps load onto the front axle — the rear becomes
+   significantly lighter. Asking the rear to provide 47.6% of braking on a
+  lightly-loaded axle causes the rears to exceed their available grip and lock.
+
+  Brake pressure confirms it — FL/FR peak at 37.5 bar, RL/RR at 34.1 bar (ratio
+  = 47.6% rear exactly).
+
+...
+
+```
+
+More LLM prompts I used:
+
+* Where do I find lap time in my last race? Ignore close up battles with others
+* Why does my rear lock up when I stay in 3 in Parabolica instead of shifting down to 2nd gear?
+* Analyze anything about my driving, look at all channels, be creative give me SMART goals
+* Look at MEMORY.md, did I follow your recommandations from my last session?
+
 ## Quick Start
 
 ```bash
-# Build
-make build
 
-# Start here — human-readable lap overview
+# This gives a full blown guide for the LLM with an escalation strategy and recommandations on how to save tokens
+ldcli guide
+
+# Use this for a human-readable lap overview. 
 ldcli laps session.ld
 
-# Browse a folder interactively (requires fzf)
+# Helper script for finding sessions in a folder interactively (requires fzf). Alert! Blazzingly fast!
 ./ldpick.sh ~/telemetry/
 
 # Full analysis workflow
+ldcli guide                                           # JSON docs for LLM usage
 ldcli events session.ld --lap 2 --type braking_zone
 ldcli diff session.ld --ref 2 --cmp 3
 ldcli report session.ld --lap 2 --out report.html
-ldcli guide                                           # JSON docs for LLM usage
 ```
 
 ## Usage with AI Agents / LLMs
